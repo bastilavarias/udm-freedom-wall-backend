@@ -6,17 +6,32 @@ use App\Common\Helper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = [
+        $validator = Validator::make($request->all(), [
+            "username" => "required",
+            "password" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            $validatorMessages = $validator->messages();
+            $errorMessage = Helper::getValidatorErrorMessage(
+                $validatorMessages,
+                ["username", "password"]
+            );
+            return Helper::apiResponse(false, $errorMessage, null, 401);
+        }
+
+        $formData = [
             "username" => $request->input("username"),
             "password" => $request->input("password"),
         ];
 
-        if (!Auth::attempt($credentials)) {
+        if (!Auth::attempt($formData)) {
             return Helper::apiResponse(false, "Invalid credentials.", null);
         }
 
