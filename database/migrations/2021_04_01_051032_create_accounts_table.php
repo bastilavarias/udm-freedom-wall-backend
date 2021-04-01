@@ -21,11 +21,6 @@ class CreateAccountsTable extends Migration
                 ->unique()
                 ->nullable();
             $table->string("password")->nullable();
-            $table->unsignedInteger("type_id");
-            $table
-                ->foreign("type_id")
-                ->references("id")
-                ->on("account_types");
             $table->softDeletes();
             $table->timestamps();
         });
