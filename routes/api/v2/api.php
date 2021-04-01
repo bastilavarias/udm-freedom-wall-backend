@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\v2\AuthenticationController;
 
-//Route::prefix('post')->group(function () {
-//    Route::get('/', [PostController::class, "get"]);
-//    Route::post('/', [PostController::class, "create"]);
-//});
+Route::prefix("authentication")->group(function () {
+    Route::post("/", [AuthenticationController::class, "login"]);
+});
