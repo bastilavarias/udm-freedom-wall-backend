@@ -22,7 +22,7 @@ class PostController extends Controller
     public function get(Request $request)
     {
         $page = $request->query("page");
-        $posts = Post::orderBY("created_at", "desc")->paginate(
+        $posts = Post::orderBy("created_at", "desc")->paginate(
             10,
             ["*"],
             "page",

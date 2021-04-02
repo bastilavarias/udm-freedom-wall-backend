@@ -10,9 +10,15 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $page = $request->query("page");
+        $perPage = $request->query("per_page");
+        $search = $request->query("search");
+        $admins = Account::where("username", "ilike", "%" . $search . "%")
+            ->orWhere("name", "ilike", "%" . $search . "%")
+            ->paginate($perPage, ["*"], "page", $page);
+        return Helper::apiResponse(true, "Successfully got records.", $admins);
     }
 
     public function create(Request $request)

@@ -11,5 +11,6 @@ Route::prefix("authentication")->group(function () {
 Route::middleware("auth:api")
     ->prefix("admin")
     ->group(function () {
+        Route::get("/", [AdminController::class, "index"]);
         Route::post("/", [AdminController::class, "create"]);
     });
