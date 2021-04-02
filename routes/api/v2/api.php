@@ -14,5 +14,6 @@ Route::middleware("auth:api")
         Route::get("/", [AdminController::class, "index"]);
         Route::get("/{id}", [AdminController::class, "show"]);
         Route::post("/", [AdminController::class, "create"]);
-        Route::put("/", [AdminController::class, "edit"]);
+        Route::put("/", [AdminController::class, "update"]);
+        Route::delete("/{id}", [AdminController::class, "destroy"]);
     });

@@ -64,7 +64,7 @@ class AdminController extends Controller
         return Helper::apiResponse(true, "Successfully got records.", $admin);
     }
 
-    public function edit(Request $request)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             "id" => "required",
@@ -101,13 +101,21 @@ class AdminController extends Controller
         );
     }
 
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
     public function destroy($id)
     {
-        //
+        $admin = Account::find($id);
+        if ($admin) {
+            $admin->delete();
+            return Helper::apiResponse(
+                true,
+                "Successfully deleted record.",
+                $admin
+            );
+        }
+        return Helper::apiResponse(
+            true,
+            "Successfully deleted record.",
+            $admin
+        );
     }
 }
