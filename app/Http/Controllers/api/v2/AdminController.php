@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\v2;
 
 use App\Common\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,10 +38,12 @@ class AdminController extends Controller
             "password" => $request->input("password"),
         ];
 
+        $admin = Account::create($formData);
+
         return Helper::apiResponse(
             true,
             "Successfully created record.",
-            $formData
+            $admin
         );
     }
 
