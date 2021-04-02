@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -35,13 +36,13 @@ class AdminController extends Controller
                 $validatorMessages,
                 ["name", "username", "password"]
             );
-            return Helper::apiResponse(false, $errorMessage, null, 401);
+            return Helper::apiResponse(false, $errorMessage, null, 400);
         }
 
         $formData = [
             "name" => $request->input("name"),
             "username" => $request->input("username"),
-            "password" => $request->input("password"),
+            "password" => Hash::make($request->input("password")),
         ];
 
         $admin = Account::create($formData);
@@ -59,13 +60,45 @@ class AdminController extends Controller
 
     public function show($id)
     {
-        $admin = Account::where("id", $id)->first();
+        $admin = Account::find($id);
         return Helper::apiResponse(true, "Successfully got records.", $admin);
     }
 
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "id" => "required",
+            "name" => "required",
+            "password" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            $validatorMessages = $validator->messages();
+            $errorMessage = Helper::getValidatorErrorMessage(
+                $validatorMessages,
+                ["id", "name", "password"]
+            );
+            return Helper::apiResponse(false, $errorMessage, null, 400);
+        }
+
+        $formData = [
+            "id" => $request->input("id"),
+            "name" => $request->input("name"),
+            "password" => Hash::make($request->input("password")),
+        ];
+
+        $admin = Account::find($formData["id"]);
+        if (!$admin) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
+
+        $admin->fill($formData)->save();
+
+        return Helper::apiResponse(
+            true,
+            "Successfully updated record.",
+            $admin
+        );
     }
 
     public function update(Request $request, $id)
