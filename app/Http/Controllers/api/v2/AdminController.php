@@ -55,12 +55,12 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        //
     }
 
     public function show($id)
     {
-        //
+        $admin = Account::where("id", $id)->first();
+        return Helper::apiResponse(true, "Successfully got records.", $admin);
     }
 
     public function edit($id)
