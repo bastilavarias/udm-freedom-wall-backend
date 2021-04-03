@@ -18,6 +18,7 @@ class AdminController extends Controller
         $search = $request->query("search");
         $admins = Account::where("username", "ilike", "%" . $search . "%")
             ->orWhere("name", "ilike", "%" . $search . "%")
+            ->orderBy("id", "asc")
             ->paginate($perPage, ["*"], "page", $page);
         return Helper::apiResponse(true, "Successfully got records.", $admins);
     }
