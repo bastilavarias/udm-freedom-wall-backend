@@ -116,6 +116,7 @@ class AdminController extends Controller
                 $admin
             );
         }
+
         return Helper::apiResponse(
             true,
             "Successfully deleted record.",

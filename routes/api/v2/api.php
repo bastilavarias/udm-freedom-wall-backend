@@ -26,4 +26,5 @@ Route::middleware("auth:api")
         Route::get("/type/{id}", [PeopleTypeController::class, "show"]);
         Route::post("/type", [PeopleTypeController::class, "create"]);
         Route::put("/type", [PeopleTypeController::class, "update"]);
+        Route::delete("/type/{id}", [PeopleTypeController::class, "destroy"]);
     });
