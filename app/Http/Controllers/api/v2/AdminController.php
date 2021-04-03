@@ -61,7 +61,7 @@ class AdminController extends Controller
     public function show($id)
     {
         $admin = Account::find($id);
-        return Helper::apiResponse(true, "Successfully got records.", $admin);
+        return Helper::apiResponse(true, "Successfully got record.", $admin);
     }
 
     public function update(Request $request)
