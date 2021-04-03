@@ -72,7 +72,36 @@ class PeopleTypeController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "label" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            $validatorMessages = $validator->messages();
+            $errorMessage = Helper::getValidatorErrorMessage(
+                $validatorMessages,
+                ["label"]
+            );
+            return Helper::apiResponse(false, $errorMessage, null, 400);
+        }
+
+        $formData = [
+            "label" => $request->input("label"),
+            "description" => $request->input("description"),
+        ];
+
+        $peopleType = PeopleType::find($id);
+        if (!$peopleType) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
+
+        $peopleType->fill($formData)->save();
+
+        return Helper::apiResponse(
+            true,
+            "Successfully updated record.",
+            $peopleType
+        );
     }
 
     public function destroy($id)
