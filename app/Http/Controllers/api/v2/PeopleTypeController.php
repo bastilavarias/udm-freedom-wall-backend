@@ -105,6 +105,20 @@ class PeopleTypeController extends Controller
 
     public function destroy($id)
     {
-        //
+        $peopleType = PeopleType::find($id);
+        if ($peopleType) {
+            $peopleType->delete();
+            return Helper::apiResponse(
+                true,
+                "Successfully deleted record.",
+                $peopleType
+            );
+        }
+
+        return Helper::apiResponse(
+            true,
+            "Successfully deleted record.",
+            $peopleType
+        );
     }
 }
