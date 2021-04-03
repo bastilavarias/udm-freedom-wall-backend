@@ -59,7 +59,12 @@ class PeopleTypeController extends Controller
 
     public function show($id)
     {
-        //
+        $peopleType = PeopleType::find($id);
+        return Helper::apiResponse(
+            true,
+            "Successfully got record.",
+            $peopleType
+        );
     }
 
     public function update(Request $request, $id)
