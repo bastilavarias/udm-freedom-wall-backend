@@ -61,6 +61,9 @@ class AdminController extends Controller
     public function show($id)
     {
         $admin = Account::find($id);
+        if (!$admin) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
         return Helper::apiResponse(true, "Successfully got record.", $admin);
     }
 

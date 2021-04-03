@@ -60,6 +60,9 @@ class PeopleTypeController extends Controller
     public function show($id)
     {
         $peopleType = PeopleType::find($id);
+        if (!$peopleType) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
         return Helper::apiResponse(
             true,
             "Successfully got record.",
