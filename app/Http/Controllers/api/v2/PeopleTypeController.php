@@ -15,11 +15,9 @@ class PeopleTypeController extends Controller
         $page = $request->query("page");
         $perPage = $request->query("per_page");
         $search = $request->query("search");
-        $admins = PeopleType::where(
-            "label",
-            "ilike",
-            "%" . $search . "%"
-        )->paginate($perPage, ["*"], "page", $page);
+        $admins = PeopleType::where("label", "ilike", "%" . $search . "%")
+            ->orderBy("id", "asc")
+            ->paginate($perPage, ["*"], "page", $page);
         return Helper::apiResponse(true, "Successfully got records.", $admins);
     }
 
@@ -60,6 +58,9 @@ class PeopleTypeController extends Controller
     public function show($id)
     {
         $peopleType = PeopleType::find($id);
+        if (!$peopleType) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
         return Helper::apiResponse(
             true,
             "Successfully got record.",
@@ -67,9 +68,39 @@ class PeopleTypeController extends Controller
         );
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "label" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            $validatorMessages = $validator->messages();
+            $errorMessage = Helper::getValidatorErrorMessage(
+                $validatorMessages,
+                ["label"]
+            );
+            return Helper::apiResponse(false, $errorMessage, null, 400);
+        }
+
+        $formData = [
+            "id" => $request->input("id"),
+            "label" => $request->input("label"),
+            "description" => $request->input("description"),
+        ];
+
+        $peopleType = PeopleType::find($formData["id"]);
+        if (!$peopleType) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
+
+        $peopleType->fill($formData)->save();
+
+        return Helper::apiResponse(
+            true,
+            "Successfully updated record.",
+            $peopleType
+        );
     }
 
     public function destroy($id)

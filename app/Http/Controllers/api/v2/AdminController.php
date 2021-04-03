@@ -18,6 +18,7 @@ class AdminController extends Controller
         $search = $request->query("search");
         $admins = Account::where("username", "ilike", "%" . $search . "%")
             ->orWhere("name", "ilike", "%" . $search . "%")
+            ->orderBy("id", "asc")
             ->paginate($perPage, ["*"], "page", $page);
         return Helper::apiResponse(true, "Successfully got records.", $admins);
     }
@@ -61,6 +62,9 @@ class AdminController extends Controller
     public function show($id)
     {
         $admin = Account::find($id);
+        if (!$admin) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
         return Helper::apiResponse(true, "Successfully got record.", $admin);
     }
 
