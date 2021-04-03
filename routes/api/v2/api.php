@@ -22,5 +22,6 @@ Route::middleware("auth:api")
 Route::middleware("auth:api")
     ->prefix("people")
     ->group(function () {
+        Route::get("/type", [PeopleTypeController::class, "index"]);
         Route::post("/type", [PeopleTypeController::class, "create"]);
     });
