@@ -101,8 +101,22 @@ class PeopleController extends Controller
         );
     }
 
-    public function destroy(People $people)
+    public function destroy($id)
     {
-        //
+        $people = People::find($id);
+        if ($people) {
+            $people->delete();
+            return Helper::apiResponse(
+                true,
+                "Successfully deleted record.",
+                $people
+            );
+        }
+
+        return Helper::apiResponse(
+            true,
+            "Successfully deleted record.",
+            $people
+        );
     }
 }
