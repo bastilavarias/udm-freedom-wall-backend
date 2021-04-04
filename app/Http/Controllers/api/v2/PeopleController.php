@@ -103,7 +103,7 @@ class PeopleController extends Controller
 
     public function destroy($id)
     {
-        $people = People::find($id);
+        $people = People::with("type")->find($id);
         if ($people) {
             $people->delete();
             return Helper::apiResponse(
