@@ -39,6 +39,7 @@ class PeopleController extends Controller
 
         $createdPeople = People::create($formData);
         $people = People::with("type")->find($createdPeople->id);
+
         return Helper::apiResponse(
             true,
             "Successfully created record.",
