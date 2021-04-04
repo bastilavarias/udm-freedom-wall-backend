@@ -62,9 +62,43 @@ class PeopleController extends Controller
         return Helper::apiResponse(true, "Successfully got record.", $people);
     }
 
-    public function update(Request $request, People $people)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "id" => "required",
+            "name" => "required",
+            "type_id" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            $validatorMessages = $validator->messages();
+            $errorMessage = Helper::getValidatorErrorMessage(
+                $validatorMessages,
+                ["id", "name", "type_id"]
+            );
+            return Helper::apiResponse(false, $errorMessage, null, 400);
+        }
+
+        $formData = [
+            "id" => $request->input("id"),
+            "name" => $request->input("name"),
+            "type_id" => (int) $request->input("type_id"),
+        ];
+
+        $people = People::with("type")->find($formData["id"]);
+        if (!$people) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
+
+        $people->fill($formData)->save();
+
+        $updatedPeople = People::with("type")->find($people->id);
+
+        return Helper::apiResponse(
+            true,
+            "Successfully updated record.",
+            $updatedPeople
+        );
     }
 
     public function destroy(People $people)
