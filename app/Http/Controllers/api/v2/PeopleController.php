@@ -10,14 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class PeopleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $page = $request->query("page");
+        $perPage = $request->query("per_page");
+        $search = $request->query("search");
+        $admins = People::with("type")
+            ->where("name", "ilike", "%" . $search . "%")
+            ->orderBy("id", "asc")
+            ->paginate($perPage, ["*"], "page", $page);
+        return Helper::apiResponse(true, "Successfully got records.", $admins);
     }
 
     public function create(Request $request)
     {
-        //
         $validator = Validator::make($request->all(), [
             "name" => "required",
             "type_id" => "required",
