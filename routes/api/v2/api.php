@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v2\AuthenticationController;
 use App\Http\Controllers\api\v2\AdminController;
 use App\Http\Controllers\api\v2\PeopleTypeController;
+use App\Http\Controllers\api\v2\PeopleController;
 
 Route::prefix("authentication")->group(function () {
     Route::post("/", [AuthenticationController::class, "login"]);
@@ -22,6 +23,12 @@ Route::middleware("auth:api")
 Route::middleware("auth:api")
     ->prefix("people")
     ->group(function () {
+        Route::get("/", [PeopleController::class, "index"]);
+        Route::get("/{id}", [PeopleController::class, "show"]);
+        Route::post("/", [PeopleController::class, "create"]);
+        Route::put("/", [PeopleController::class, "update"]);
+        Route::delete("/{id}", [PeopleController::class, "destroy"]);
+
         Route::get("/type", [PeopleTypeController::class, "index"]);
         Route::get("/type/{id}", [PeopleTypeController::class, "show"]);
         Route::post("/type", [PeopleTypeController::class, "create"]);
