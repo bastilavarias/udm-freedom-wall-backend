@@ -53,9 +53,13 @@ class PeopleController extends Controller
         );
     }
 
-    public function show(People $people)
+    public function show($id)
     {
-        //
+        $people = People::with("type")->find($id);
+        if (!$people) {
+            return Helper::apiResponse(false, "Record not found.", null, 400);
+        }
+        return Helper::apiResponse(true, "Successfully got record.", $people);
     }
 
     public function update(Request $request, People $people)
