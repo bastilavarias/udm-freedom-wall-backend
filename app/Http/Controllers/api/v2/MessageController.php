@@ -39,4 +39,15 @@ class MessageController extends Controller
             $message
         );
     }
+
+    public function getAccountMessages(Request $request, $people_id)
+    {
+        $page = $request->query("page");
+        $perPage = $request->query("per_page");
+        $admins = Message::with("people")
+            ->where("people_id", $people_id)
+            ->orderBy("id", "desc")
+            ->paginate($perPage, ["*"], "page", $page);
+        return Helper::apiResponse(true, "Successfully got records.", $admins);
+    }
 }

@@ -25,10 +25,6 @@ Route::middleware("auth:api")
     ->prefix("people")
     ->group(function () {
         Route::get("/", [PeopleController::class, "index"]);
-        //        Route::get("/message/{people_id}", [
-        //            PeopleController::class,
-        //            "getMessages",
-        //        ]);
         Route::get("/{id}", [PeopleController::class, "show"]);
         Route::post("/", [PeopleController::class, "create"]);
         Route::put("/", [PeopleController::class, "update"]);
@@ -43,4 +39,8 @@ Route::middleware("auth:api")
 
 Route::prefix("message")->group(function () {
     Route::post("/", [MessageController::class, "create"]);
+    Route::get("/account/{people_id}", [
+        MessageController::class,
+        "getAccountMessages",
+    ]);
 });
