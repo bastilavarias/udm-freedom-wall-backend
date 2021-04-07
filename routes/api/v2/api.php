@@ -5,6 +5,7 @@ use App\Http\Controllers\api\v2\AuthenticationController;
 use App\Http\Controllers\api\v2\AdminController;
 use App\Http\Controllers\api\v2\PeopleTypeController;
 use App\Http\Controllers\api\v2\PeopleController;
+use App\Http\Controllers\api\v2\MessageController;
 
 Route::prefix("authentication")->group(function () {
     Route::post("/", [AuthenticationController::class, "login"]);
@@ -24,6 +25,10 @@ Route::middleware("auth:api")
     ->prefix("people")
     ->group(function () {
         Route::get("/", [PeopleController::class, "index"]);
+        //        Route::get("/message/{people_id}", [
+        //            PeopleController::class,
+        //            "getMessages",
+        //        ]);
         Route::get("/{id}", [PeopleController::class, "show"]);
         Route::post("/", [PeopleController::class, "create"]);
         Route::put("/", [PeopleController::class, "update"]);
@@ -35,3 +40,7 @@ Route::middleware("auth:api")
         Route::put("/type", [PeopleTypeController::class, "update"]);
         Route::delete("/type/{id}", [PeopleTypeController::class, "destroy"]);
     });
+
+Route::prefix("message")->group(function () {
+    Route::post("/", [MessageController::class, "create"]);
+});
