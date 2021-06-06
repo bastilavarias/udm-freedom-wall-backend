@@ -13,7 +13,8 @@ class Post extends Model
 
     protected $fillable = [
         "text",
-        "flair"
+        "flair",
+        "url"
     ];
 
 }

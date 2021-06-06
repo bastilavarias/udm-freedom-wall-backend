@@ -11,9 +11,13 @@ class PostController extends Controller
 {
     public function create(Request $request)
     {
+       $request->validate([
+         'url' => 'url'
+       ]);
         $credentials = [
             "text" => $request->input("text"),
             "flair" => $request->input("flair"),
+            "url" => $request->input("url")
         ];
         $post = Post::create($credentials);
         return Helper::apiResponse(true, "Successfully created record.", $post);
